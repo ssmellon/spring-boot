@@ -3,22 +3,27 @@ server:
 spring:
   application:
     name: gateway
-  cloud:
-    gateway:
-      routes:
-        - id: host_route
-          uri: http://127.0.0.1:8081/world/
-          predicates:
-            - Path=/app/**
-          filters:
-            - StripPrefix=1
-        - id: host_route
-          uri: lb://client
-          predicates:
-            - Path=/api/**
-          filters:
-            - StripPrefix=1
-
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: host_route
+#          uri: http://127.0.0.1:8081
+#          predicates:
+#            - Path=/app/**
+#          filters:
+#            - StripPrefix=1
+#            - PrefixPath=/world/
+#            - RewritePath=/app/(?<segment>.*), /world/$\{segment}
+#        - id: host_route
+#          uri: lb://client
+#          predicates:
+#            - Path=/api/**
+#          filters:
+#            - StripPrefix=1
+gate:
+  client:
+    world: http://127.0.0.1:8081
+    hello: lb://client
 eureka:
   client:
     register-with-eureka: true

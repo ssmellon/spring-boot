@@ -1,15 +1,21 @@
 package com.karl.pre;
 
+import com.karl.pre.filter.AuthorityFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.core.env.Environment;
 
 @SpringBootApplication(scanBasePackages={"org.springframework.http"})
 @EnableEurekaClient
 public class CloudGatewayApplication {
+
+    @Autowired
+    Environment environment;
 
     /**
      * 基本的转发
@@ -22,11 +28,14 @@ public class CloudGatewayApplication {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 //basic proxy
-                .route("path_route", r -> r.path("/jd")
-                        .uri("http://jd.com:80/").id("jd_route")
+                .route( r -> r.path("/app/**")
+                        .filters(f -> f.rewritePath("/app/(?<segment>.*)", "/world/$\\{segment}")
+                        .filter(new AuthorityFilter()))
+                        .uri(environment.getProperty("gate.client.world")).id("jd_route")
                 )
-                .route("path_route", r -> r.path("/get")
-                        .uri("http://httpbin.org"))
+                .route("path_route", r -> r.path("/api/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri(environment.getProperty("gate.client.hello")))
                 .route("path_route1", r -> r.path("/a")
                         .uri("http://localhost:8080/getUser"))
                 .build();
