@@ -11,8 +11,8 @@ spring:
 #          predicates:
 #            - Path=/app/**
 #          filters:
-#            - StripPrefix=1
-#            - PrefixPath=/world/
+##            - StripPrefix=1
+##            - PrefixPath=/world/
 #            - RewritePath=/app/(?<segment>.*), /world/$\{segment}
 #        - id: host_route
 #          uri: lb://client
@@ -20,6 +20,16 @@ spring:
 #            - Path=/api/**
 #          filters:
 #            - StripPrefix=1
+#        - id: canary_v1
+#          uri: http://127.0.0.1:8081/v1
+#          predicates:
+#            - Path=/test
+#            - Weight=canary, 50
+#        - id: canary_v2
+#          uri: http://127.0.0.1:8081/v2
+#          predicates:
+#            - Path=/test
+#            - Weight=canary, 50
 gate:
   client:
     world: http://127.0.0.1:8081

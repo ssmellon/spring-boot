@@ -36,8 +36,24 @@ public class CloudGatewayApplication {
                 .route("path_route", r -> r.path("/api/**")
                         .filters(f -> f.stripPrefix(1))
                         .uri(environment.getProperty("gate.client.hello")))
-                .route("path_route1", r -> r.path("/a")
-                        .uri("http://localhost:8080/getUser"))
+                .route("canary_v1", r ->
+                    r.path("/test")
+                            .filters(f -> {
+                                f.rewritePath("/test","/v1");
+                                r.weight("canary",50);
+                                return f;
+                            })
+                            .uri(environment.getProperty("gate.client.world"))
+                )
+                .route("canary_v2", r ->
+                        r.path("/test")
+                                .filters(f -> {
+                                    f.rewritePath("/test","/v2");
+                                    r.weight("canary",50);
+                                    return f;
+                                })
+                                .uri(environment.getProperty("gate.client.hello"))
+                )
                 .build();
     }
 
