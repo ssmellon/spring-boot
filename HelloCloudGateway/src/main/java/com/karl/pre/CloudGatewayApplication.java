@@ -1,14 +1,20 @@
 package com.karl.pre;
 
 import com.karl.pre.filter.AuthorityFilter;
+import com.karl.pre.filter.RequestRateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.core.env.Environment;
+import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 @SpringBootApplication(scanBasePackages={"org.springframework.http"})
 @EnableEurekaClient
@@ -28,6 +34,14 @@ public class CloudGatewayApplication {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 //basic proxy
+                .route("limit_test", r -> r.path("/limit")
+                        .filters(f ->
+                        {
+                            f.rewritePath("/limit","/hello");
+                            f.filter(new RequestRateLimiter(10, 20, Duration.ofMinutes(1)));
+                            return f;
+                        })
+                        .uri(environment.getProperty("gate.client.hello")))
                 .route( r -> r.path("/app/**")
                         .filters(f -> f.rewritePath("/app/(?<segment>.*)", "/world/$\\{segment}")
                         .filter(new AuthorityFilter()))
@@ -55,6 +69,11 @@ public class CloudGatewayApplication {
                                 .uri(environment.getProperty("gate.client.hello"))
                 )
                 .build();
+    }
+
+    @Bean
+    KeyResolver apiKeyResolver() {
+        return exchange -> Mono.just(exchange.getRequest().getPath().value());
     }
 
     public static void main(String[] args) {

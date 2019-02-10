@@ -3,9 +3,21 @@ server:
 spring:
   application:
     name: gateway
-#  cloud:
-#    gateway:
-#      routes:
+  cloud:
+    gateway:
+      routes:
+        - id: limit_test
+          uri: lb://client
+          predicates:
+            - Path=/limit/**
+          filters:
+#            - RewritePath=/limit, /hello
+            - StripPrefix=1
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 10
+#                redis-rate-limiter.burstCapacity: 20
+#                key-resolver: "#{@ipKeyResolver}"
 #        - id: host_route
 #          uri: http://127.0.0.1:8081
 #          predicates:
@@ -20,16 +32,7 @@ spring:
 #            - Path=/api/**
 #          filters:
 #            - StripPrefix=1
-#        - id: canary_v1
-#          uri: http://127.0.0.1:8081/v1
-#          predicates:
-#            - Path=/test
-#            - Weight=canary, 50
-#        - id: canary_v2
-#          uri: http://127.0.0.1:8081/v2
-#          predicates:
-#            - Path=/test
-#            - Weight=canary, 50
+
 gate:
   client:
     world: http://127.0.0.1:8081
