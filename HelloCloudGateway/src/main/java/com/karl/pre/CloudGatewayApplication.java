@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
-@SpringBootApplication(scanBasePackages={"org.springframework.http"})
+@SpringBootApplication(scanBasePackages={"org.springframework.http","com.karl.pre"})
 @EnableEurekaClient
 public class CloudGatewayApplication {
 
@@ -42,32 +42,32 @@ public class CloudGatewayApplication {
                             return f;
                         })
                         .uri(environment.getProperty("gate.client.hello")))
-                .route( r -> r.path("/app/**")
-                        .filters(f -> f.rewritePath("/app/(?<segment>.*)", "/world/$\\{segment}")
-                        .filter(new AuthorityFilter()))
-                        .uri(environment.getProperty("gate.client.world")).id("jd_route")
-                )
-                .route("path_route", r -> r.path("/api/**")
-                        .filters(f -> f.stripPrefix(1))
-                        .uri(environment.getProperty("gate.client.hello")))
-                .route("canary_v1", r ->
-                    r.path("/test")
-                            .filters(f -> {
-                                f.rewritePath("/test","/v1");
-                                r.weight("canary",50);
-                                return f;
-                            })
-                            .uri(environment.getProperty("gate.client.world"))
-                )
-                .route("canary_v2", r ->
-                        r.path("/test")
-                                .filters(f -> {
-                                    f.rewritePath("/test","/v2");
-                                    r.weight("canary",50);
-                                    return f;
-                                })
-                                .uri(environment.getProperty("gate.client.hello"))
-                )
+//                .route( r -> r.path("/app/**")
+//                        .filters(f -> f.rewritePath("/app/(?<segment>.*)", "/world/$\\{segment}")
+//                        .filter(new AuthorityFilter()))
+//                        .uri(environment.getProperty("gate.client.world")).id("app_route")
+//                )
+//                .route("path_route", r -> r.path("/api/**")
+//                        .filters(f -> f.stripPrefix(1))
+//                        .uri(environment.getProperty("gate.client.hello")))
+//                .route("canary_v1", r ->
+//                    r.path("/test")
+//                            .filters(f -> {
+//                                f.rewritePath("/test","/v1");
+//                                r.weight("canary",50);
+//                                return f;
+//                            })
+//                            .uri(environment.getProperty("gate.client.world"))
+//                )
+//                .route("canary_v2", r ->
+//                        r.path("/test")
+//                                .filters(f -> {
+//                                    f.rewritePath("/test","/v2");
+//                                    r.weight("canary",50);
+//                                    return f;
+//                                })
+//                                .uri(environment.getProperty("gate.client.hello"))
+//                )
                 .build();
     }
 
@@ -79,4 +79,6 @@ public class CloudGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(CloudGatewayApplication.class, args);
     }
+
+
 }

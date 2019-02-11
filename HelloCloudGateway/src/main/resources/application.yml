@@ -3,16 +3,16 @@ server:
 spring:
   application:
     name: gateway
-  cloud:
-    gateway:
-      routes:
-        - id: limit_test
-          uri: lb://client
-          predicates:
-            - Path=/limit/**
-          filters:
-#            - RewritePath=/limit, /hello
-            - StripPrefix=1
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: limit_test
+#          uri: lb://client
+#          predicates:
+#            - Path=/limit/**
+#          filters:
+##            - RewritePath=/limit, /hello
+#            - StripPrefix=1
 #            - name: RequestRateLimiter
 #              args:
 #                redis-rate-limiter.replenishRate: 10
