@@ -21,7 +21,7 @@ public class PathFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         URI url = request.getURI();
         System.out.println("00000000000000000000000");
-        System.out.println();
+        System.out.println(url.getPath());
         System.out.println("11111111111111111111111");
         return chain.filter(exchange);
     }
