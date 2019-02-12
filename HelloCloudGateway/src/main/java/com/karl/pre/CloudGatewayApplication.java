@@ -1,6 +1,7 @@
 package com.karl.pre;
 
 import com.karl.pre.filter.AuthorityFilter;
+import com.karl.pre.filter.PathFilter;
 import com.karl.pre.filter.RequestRateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -42,6 +43,9 @@ public class CloudGatewayApplication {
                             return f;
                         })
                         .uri(environment.getProperty("gate.client.hello")))
+                .route("path_route", r -> r.path("/path/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri(environment.getProperty("gate.client.world")))
 //                .route( r -> r.path("/app/**")
 //                        .filters(f -> f.rewritePath("/app/(?<segment>.*)", "/world/$\\{segment}")
 //                        .filter(new AuthorityFilter()))
@@ -80,5 +84,9 @@ public class CloudGatewayApplication {
         SpringApplication.run(CloudGatewayApplication.class, args);
     }
 
-
+    @Bean
+    public PathFilter pathFilter()
+    {
+        return new PathFilter();
+    }
 }

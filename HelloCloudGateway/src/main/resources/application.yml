@@ -35,7 +35,7 @@ spring:
 
 gate:
   client:
-    world: http://127.0.0.1:8081
+    world: http://127.0.0.1:18081
     hello: lb://client
 eureka:
   client:
