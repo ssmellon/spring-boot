@@ -43,9 +43,9 @@ public class CloudGatewayApplication {
                             return f;
                         })
                         .uri(environment.getProperty("gate.client.hello")))
-                .route("path_route", r -> r.path("/path/**")
-                        .filters(f -> f.stripPrefix(1))
-                        .uri(environment.getProperty("gate.client.world")))
+//                .route("path_route", r -> r.path("/path/**")
+////                        .filters(f -> f.stripPrefix(1))
+//                        .uri(environment.getProperty("gate.client.world")))
 //                .route( r -> r.path("/app/**")
 //                        .filters(f -> f.rewritePath("/app/(?<segment>.*)", "/world/$\\{segment}")
 //                        .filter(new AuthorityFilter()))
@@ -84,9 +84,9 @@ public class CloudGatewayApplication {
         SpringApplication.run(CloudGatewayApplication.class, args);
     }
 
-    @Bean
-    public PathFilter pathFilter()
-    {
-        return new PathFilter();
-    }
+//    @Bean
+//    public PathFilter pathFilter()
+//    {
+//        return new PathFilter();
+//    }
 }

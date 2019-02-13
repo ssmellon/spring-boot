@@ -35,20 +35,19 @@ public class RouteController {
         PredicateDefinition predicateDefinition = new PredicateDefinition();
         Map<String, String> predicateParams = new HashMap<>(8);
         predicateDefinition.setName("Path");
-        predicateParams.put("pattern", "/app/**");
+        predicateParams.put("pattern", "/path/**");
         predicateDefinition.setArgs(predicateParams);
         definition.setPredicates(Arrays.asList(predicateDefinition));
-
 
         FilterDefinition filterDefinition = new FilterDefinition();
         Map<String, String> filterParams = new HashMap<>(8);
         filterDefinition.setName("RewritePath");
-        filterParams.put("regex", "/app/(?<segment>.*)");
-        filterParams.put("replacement", "/world/$\\{segment}");
+        filterParams.put("regexp", "/path/(?<segment>.*)");
+        filterParams.put("replacement", "/client/$\\{segment}");
         filterDefinition.setArgs(filterParams);
         definition.setFilters(Arrays.asList(filterDefinition));
 
-        URI uri1 = UriComponentsBuilder.fromPath(environment.getProperty("gate.client.world")).build().toUri();
+        URI uri1 = UriComponentsBuilder.fromHttpUrl(environment.getProperty("gate.client.world")).build().toUri();
         definition.setUri(uri1);
 
         return this.dynamicRouteService.add(definition);
