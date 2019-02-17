@@ -38,7 +38,7 @@ public class CloudGatewayApplication {
                 .route("limit_test", r -> r.path("/limit")
                         .filters(f ->
                         {
-                            f.rewritePath("/limit","/hello");
+                            f.rewritePath("/limit","/client/hello");
                             f.filter(new RequestRateLimiter(10, 20, Duration.ofMinutes(1)));
                             return f;
                         })
@@ -46,20 +46,20 @@ public class CloudGatewayApplication {
 //                .route("path_route", r -> r.path("/path/**")
 ////                        .filters(f -> f.stripPrefix(1))
 //                        .uri(environment.getProperty("gate.client.world")))
-//                .route( r -> r.path("/app/**")
-//                        .filters(f -> f.rewritePath("/app/(?<segment>.*)", "/world/$\\{segment}")
+                .route("hello_route", r -> r.path("/path/**")
+                        .filters(f -> f.rewritePath("/path/(?<segment>.*)", "/client/${segment}"))
 //                        .filter(new AuthorityFilter()))
-//                        .uri(environment.getProperty("gate.client.world")).id("app_route")
-//                )
-//                .route("path_route", r -> r.path("/api/**")
-//                        .filters(f -> f.stripPrefix(1))
-//                        .uri(environment.getProperty("gate.client.hello")))
+                        .uri(environment.getProperty("gate.client.hello"))
+                )
+                .route("path_route", r -> r.path("/api/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri(environment.getProperty("gate.client.hello")))
 //                .route("canary_v1", r ->
 //                    r.path("/test")
 //                            .filters(f -> {
+//                                return f;
 //                                f.rewritePath("/test","/v1");
 //                                r.weight("canary",50);
-//                                return f;
 //                            })
 //                            .uri(environment.getProperty("gate.client.world"))
 //                )
@@ -75,10 +75,10 @@ public class CloudGatewayApplication {
                 .build();
     }
 
-    @Bean
-    KeyResolver apiKeyResolver() {
-        return exchange -> Mono.just(exchange.getRequest().getPath().value());
-    }
+//    @Bean
+//    KeyResolver apiKeyResolver() {
+//        return exchange -> Mono.just(exchange.getRequest().getPath().value());
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(CloudGatewayApplication.class, args);
