@@ -28,13 +28,13 @@ spring:
       httpclient:
         ssl:
           useInsecureTrustManager: true
-      routes:
-        - id: prefixpath_route
-          uri: http://localhost:8081/client/hello
-          predicates:
-            - Path=/path/**
-          filters:
-            - RedirectTo=302, https://localhost:18081/path/hello
+#      routes:
+#        - id: prefixpath_route
+#          uri: http://localhost:8081/client/hello
+#          predicates:
+#            - Path=/path/**
+#          filters:
+#            - RedirectTo=302, https://localhost:18081/path/hello
 #        - id: limit_test
 #          uri: lb://client
 #          predicates:
@@ -64,7 +64,7 @@ spring:
 
 gate:
   client:
-    world: https://192.168.43.74:18081
+    world: http://localhost:8081
     hello: lb://CLIENT
 eureka:
   client:

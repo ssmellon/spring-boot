@@ -46,7 +46,7 @@ public class RouteController {
         filterParams.put("replacement", "/client/$\\{segment}");
         filterDefinition.setArgs(filterParams);
         definition.setFilters(Arrays.asList(filterDefinition));
-
+//        UriComponentsBuilder.fromHttpUrl();
         URI uri1 = UriComponentsBuilder.fromHttpUrl(environment.getProperty("gate.client.world")).build().toUri();
         definition.setUri(uri1);
 
