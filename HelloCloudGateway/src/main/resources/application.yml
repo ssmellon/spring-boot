@@ -28,7 +28,13 @@ spring:
       httpclient:
         ssl:
           useInsecureTrustManager: true
-#      routes:
+      routes:
+        - id: prefixpath_route
+          uri: http://localhost:8081/client/hello
+          predicates:
+            - Path=/path/**
+          filters:
+            - RedirectTo=302, https://localhost:18081/path/hello
 #        - id: limit_test
 #          uri: lb://client
 #          predicates:
