@@ -11,7 +11,8 @@ server:
     key-store: server.p12
     key-store-password: 123456
     key-password: 123456
-
+http:
+  port: 8082
 #https:
 #  port: 8443
 #  ssl:
@@ -57,7 +58,7 @@ spring:
 
 gate:
   client:
-    world: http://192.168.43.74:8081
+    world: https://192.168.43.74:18081
     hello: lb://CLIENT
 eureka:
   client:

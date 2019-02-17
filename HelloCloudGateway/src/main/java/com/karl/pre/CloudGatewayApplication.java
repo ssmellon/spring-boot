@@ -4,8 +4,14 @@ import com.karl.pre.filter.AuthorityFilter;
 import com.karl.pre.filter.PathFilter;
 import com.karl.pre.filter.RequestRateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatReactiveWebServerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.reactive.server.ReactiveWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -14,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.core.env.Environment;
 import reactor.core.publisher.Mono;
+import reactor.ipc.netty.resources.LoopResources;
 
 import java.time.Duration;
 
@@ -34,6 +41,11 @@ public class CloudGatewayApplication {
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
+//                .route("redirect_route", r -> r.path("/**")
+////                                .filters(f -> f.rewritePath("/path/(?<segment>.*)", "/client/${segment}"))
+////                        .filter(new AuthorityFilter()))
+//                                .uri(environment.getProperty("gate.client.world"))
+//                )
                 //basic proxy
                 .route("limit_test", r -> r.path("/limit")
                         .filters(f ->
@@ -75,15 +87,30 @@ public class CloudGatewayApplication {
                 .build();
     }
 
-//    @Bean
-//    KeyResolver apiKeyResolver() {
-//        return exchange -> Mono.just(exchange.getRequest().getPath().value());
-//    }
+    @Bean
+    KeyResolver apiKeyResolver() {
+        return exchange -> Mono.just(exchange.getRequest().getPath().value());
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(CloudGatewayApplication.class, args);
     }
 
+
+
+
+//    @Bean
+//    public ServletWebServerFactory servletContainer() {
+//        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+//        tomcat.addAdditionalTomcatConnectors(createStandardConnector()); // 添加http
+//        return tomcat;
+//    }
+//
+//    private Connector createStandardConnector() {
+//        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+//        connector.setPort(port);
+//        return connector;
+//    }
 //    @Bean
 //    public PathFilter pathFilter()
 //    {
