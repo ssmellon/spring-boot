@@ -2,6 +2,7 @@ package com.karl.pre;
 
 import com.karl.pre.filter.AuthorityFilter;
 import com.karl.pre.filter.PathFilter;
+import com.karl.pre.filter.RedirectFilter;
 import com.karl.pre.filter.RequestRateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,13 +59,27 @@ public class CloudGatewayApplication {
 //                .route("path_route", r -> r.path("/path/**")
 ////                        .filters(f -> f.stripPrefix(1))
 //                        .uri(environment.getProperty("gate.client.world")))
-//                .route("hello_route", r -> r.path("/path/**")
-//                        .filters(f -> f.rewritePath("/path/(?<segment>.*)", "/client/${segment}"))
-////                        .filter(new AuthorityFilter()))
-//                        .uri(environment.getProperty("gate.client.hello"))
-//                )
+                .route("redirect_route", r -> r.path("/path/**/route")
+                        .filters(f -> f.redirect(302, "https://localhost:18081/route/mono"))
+                        .uri(environment.getProperty("gate.client.hello"))
+                )
+                .route("hello_route", r -> r.path("/path/**")
+                        .filters(
+                                f -> {
+                                    f.rewritePath("/path/(?<segment>.*)", "/client/${segment}");
+//                                    f.filter(new RedirectFilter());
+//                                    f.redirect(302, "https://localhost:18081/route/mono");
+                                    return f;
+                                })
+                        .uri(environment.getProperty("gate.client.hello"))
+                )
+
                 .route("path_route", r -> r.path("/api/**")
-                        .filters(f -> f.stripPrefix(1))
+                        .filters(
+                                f -> {
+                                    return f.stripPrefix(1);
+                                }
+                        )
                         .uri(environment.getProperty("gate.client.hello")))
 //                .route("canary_v1", r ->
 //                    r.path("/test")

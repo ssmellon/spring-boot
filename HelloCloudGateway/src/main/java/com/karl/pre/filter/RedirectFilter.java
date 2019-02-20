@@ -1,5 +1,6 @@
 package com.karl.pre.filter;
 
+import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -12,7 +13,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 
 //@Component
-public class RedirectFilter implements GlobalFilter, Ordered
+public class RedirectFilter implements GatewayFilter, Ordered
 {
 
     @Override
