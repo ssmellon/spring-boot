@@ -1,0 +1,18 @@
+server:
+  port: 7001
+
+spring:
+  application:
+    name: config-server
+#  profiles:
+#    active: native
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: https://github.com/ssmellon/Config.git
+          username: ssmellon
+          password: 618033@Mellon
+          search-paths: test
+
