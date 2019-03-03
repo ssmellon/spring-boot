@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: server
+#  profiles:
+#    active: peer1
+  cloud:
+    config:
+      uri: http://localhost:7001
+#      profile: server
+      label: master
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

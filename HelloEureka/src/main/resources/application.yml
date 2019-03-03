@@ -1,29 +1,6 @@
-server:
-  port: 8081
-spring:
-  application:
-    name: spring-cloud-gateway
-  cloud:
-    gateway:
-      routes:
-        - id: host_route
-          uri: http://127.0.0.1:8080/params/
-          predicates:
-          - Path=/a/**
-#          filters:
-#            - StripPrefix=1
-
-logging: ## Spring Cloud Gateway的日志配置
-  level:
-    org.springframework.cloud.gateway: TRACE
-    org.springframework.http.server.reactive: DEBUG
-    org.springframework.web.reactive: DEBUG
-    reactor.ipc.netty: DEBUG
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-  security:
-    enabled: false
+#server:
+#  port: 8761
+#
+#eureka:
+#  server:
+#    peer-eureka-nodes-update-interval-ms: 1000
