@@ -14,12 +14,14 @@ public class ClientController
     @GetMapping("/hello")
     public ResponseEntity<String> hello()
     {
-        return new ResponseEntity<>("get hello", HttpStatus.OK);
+        System.out.println("get hello ~ ");
+        return new ResponseEntity<>("get hello ~ ", HttpStatus.OK);
     }
 
     @PostMapping("/hello")
     public ResponseEntity<String> hello1()
     {
+        System.out.println("post hello ~ ");
         return new ResponseEntity<>("post hello", HttpStatus.OK);
     }
 

@@ -1,5 +1,15 @@
-server:
-  port: 8084
-spring:
-  application:
-    name: client
+#server:
+#  port: 8084
+#spring:
+#  application:
+#    name: client
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8081/eureka
+#    registry-fetch-interval-seconds: 5
+
+eureka:
+  client:
+    eureka-service-url-poll-interval-seconds: 1
