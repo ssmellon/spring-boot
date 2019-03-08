@@ -14,13 +14,12 @@ import java.io.*;
 
 @RestController
 public class HelloWorldController {
-    @RequestMapping("/getUser")
+    @RequestMapping("/hello")
     public String getUser() {
 //        throw new TestException("hello");
-        System.out.println("hello");
-        return "user";
+        System.out.println("hello eureka");
+        return "hello ~ file from eureka";
     }
-
 
     @RequestMapping("/upload")
     @ResponseBody
