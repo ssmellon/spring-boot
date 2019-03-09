@@ -25,8 +25,8 @@ import java.util.List;
 @RequestMapping("")
 public class QueryController
 {
-    @Autowired
-    DiscoveryClient discoveryClient;
+//    @Autowired
+//    DiscoveryClient discoveryClient;
 
     @Autowired
     RestTemplate restTemplate;
