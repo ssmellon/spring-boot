@@ -1,24 +1,31 @@
 package com.suyu.tomo.controller;
 
-import com.suyu.tomo.exception.TestException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 @RestController
 public class HelloWorldController {
+
+    @Value("${server.port}")
+    int serverPort;
+
     @RequestMapping("/hello")
     public String getUser() {
 //        throw new TestException("hello");
         System.out.println("hello eureka");
-        return "hello ~ file from eureka";
+        return "hello ~ file from eureka with port : " + serverPort;
+    }
+
+    @RequestMapping("/hello/hello")
+    public String hello() {
+        System.out.println("hello eureka hello");
+        return "hello ~ file from eureka hello  with port : " + serverPort;
     }
 
     @RequestMapping("/upload")
