@@ -1,0 +1,47 @@
+server:
+  port: 18083
+
+http:
+  port: 8082
+
+spring:
+  application:
+    name: riibbon-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: eureka_test
+          uri: lb://eureka-client
+          predicates:
+            - Path=/eureka-client/**
+          filters:
+            - RewritePath=/eureka-client/(?<segment>.*), /$\{segment}
+
+gate:
+  client:
+    hello: lb://eureka-client
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/ # one eureka server
+#      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/ # two eureka server
+#      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka/,http://localhost:8763/eureka/ # three eureka server
+
+
+#logging: ## Spring Cloud Gateway的日志配置
+#  level:
+#    org.springframework.cloud.gateway: TRACE
+#    org.springframework.http.server.reactive: DEBUG
+#    org.springframework.web.reactive: DEBUG
+#    reactor.ipc.netty: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
